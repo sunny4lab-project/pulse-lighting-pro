@@ -16,9 +16,9 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install pyinstaller pyserial
-      - run: python -m compileall -q app.py studio.py fixture_library.py patch_engine.py
+      - run: python -m compileall -q app.py studio.py fixture_library.py patch_engine.py group_studio.py
       - run: python -m unittest discover -v
-      - run: python -m PyInstaller --noconfirm --windowed --name PulseLightingPro --hidden-import serial studio.py
+      - run: python -m PyInstaller --noconfirm --windowed --name PulseLightingPro --hidden-import serial group_studio.py
       - uses: actions/upload-artifact@v4
         with:
           name: PulseLightingPro-${{ matrix.os }}
