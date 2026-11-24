@@ -1,0 +1,25 @@
+name: Pulse Lighting build
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pyinstaller pyserial
+      - run: python -m compileall -q app.py studio.py fixture_library.py patch_engine.py
+      - run: python -m unittest discover -v
+      - run: python -m PyInstaller --noconfirm --windowed --name PulseLightingPro --hidden-import serial studio.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PulseLightingPro-${{ matrix.os }}
+          path: dist/
